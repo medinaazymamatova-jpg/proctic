@@ -1,14 +1,184 @@
-<h3>Все Товары</h3>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Товары</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", sans-serif;
+        }
 
-{%for product in product%}
-<li>
-    <p>{{Название:  }}</p>
-    <p>{{Цена:  }}</p>
-    <p>{{Описание:  }}</p>
-    <p>{{ }}</p>
-    <p>{{ }}</p>
-</li>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            padding: 50px;
+        }
 
+        h1 {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
 
+        .subtitle {
+            color: #b5b5ff;
+            margin-bottom: 40px;
+        }
 
-{% endfor %}
+        /* ===== PRODUCTS GRID ===== */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 25px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            border-radius: 18px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .no-image {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .product-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .product-info {
+            font-size: 14px;
+            color: #dcdcff;
+            margin-bottom: 6px;
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .new {
+            background: #4caf50;
+        }
+
+        .used {
+            background: #ff9800;
+        }
+
+        .open-btn {
+            display: inline-block;
+            padding: 10px 22px;
+            background: linear-gradient(135deg, #6a5cff, #4b6bff);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: opacity 0.3s ease;
+        }
+
+        .open-btn:hover {
+            opacity: 0.85;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Все товары</h1>
+    <p class="subtitle">Исследуйте товары по направлениям</p>
+
+    <div class="products-grid">
+
+        {% for product in products %}
+        <div class="product-card">
+
+            <div class="product-image">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.product_name }}">
+                {% else %}
+                    <div class="no-image">Нет изображения</div>
+                {% endif %}
+            </div>
+
+            <div class="product-title">
+                {{ product.product_name }}
+            </div>
+
+            <div class="product-info">
+                Категория: {{ product.category.category_name }}
+            </div>
+
+            <div class="product-info">
+                Создано: {{ product.created_date|date:"d.m.Y" }}
+            </div>
+
+            <div class="product-price">
+                {{ product.price }} ₽
+            </div>
+
+            {% if product.product_type %}
+                <span class="status new">Новый</span>
+            {% else %}
+                <span class="status used">Б/У</span>
+            {% endif %}
+
+            <br><br>
+
+            <a href="#" class="open-btn">Открыть</a>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</body>
+</html>
