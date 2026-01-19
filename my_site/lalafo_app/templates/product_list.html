@@ -2,7 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Товары</title>
+    <title>Все товары</title>
+
     <style>
         * {
             margin: 0;
@@ -18,44 +19,70 @@
             padding: 50px;
         }
 
+        /* HEADER */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            gap: 20px;
+        }
+
         h1 {
-            font-size: 40px;
-            margin-bottom: 10px;
+            font-size: 42px;
+        }
+
+        .add-product a {
+            display: inline-block;
+            padding: 14px 30px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #5f5cff, #7b7bff);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: opacity .2s;
+        }
+
+        .add-product a:hover {
+            opacity: .9;
         }
 
         .subtitle {
             color: #b5b5ff;
-            margin-bottom: 40px;
+            margin-bottom: 45px;
+            font-size: 16px;
         }
 
-        /* ===== PRODUCTS GRID ===== */
+        /* GRID */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
         }
 
+        /* CARD */
         .product-card {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 25px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: rgba(255, 255, 255, 0.10);
+            border-radius: 28px;
+            padding: 24px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 12px 35px rgba(0,0,0,.35);
+            transition: all .3s ease;
         }
 
         .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            transform: translateY(-10px);
+            box-shadow: 0 22px 45px rgba(0,0,0,.55);
         }
 
+        /* IMAGE */
         .product-image {
-            width: 100%;
-            height: 180px;
-            border-radius: 18px;
-            overflow: hidden;
-            margin-bottom: 15px;
-            background: rgba(255, 255, 255, 0.15);
+            background: #fff;
+            border-radius: 22px;
+            height: 200px;
+            padding: 15px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -64,18 +91,29 @@
         .product-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         .no-image {
+            color: #777;
             font-size: 14px;
-            color: #ccc;
         }
 
+        /* TEXT */
         .product-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 600;
             margin-bottom: 10px;
+        }
+
+        .product-title a {
+            color: #fff;
+            text-decoration: none;
+            transition: color .2s;
+        }
+
+        .product-title a:hover {
+            color: #b5b5ff;
         }
 
         .product-info {
@@ -85,17 +123,18 @@
         }
 
         .product-price {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
-            margin: 15px 0;
+            margin: 16px 0 10px;
         }
 
+        /* STATUS */
         .status {
             display: inline-block;
-            padding: 6px 14px;
+            padding: 6px 16px;
             border-radius: 20px;
             font-size: 13px;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
         .new {
@@ -106,19 +145,21 @@
             background: #ff9800;
         }
 
+        /* BUTTON */
         .open-btn {
             display: inline-block;
-            padding: 10px 22px;
+            padding: 12px 26px;
             background: linear-gradient(135deg, #6a5cff, #4b6bff);
             color: #fff;
             text-decoration: none;
-            border-radius: 20px;
+            border-radius: 999px;
             font-size: 14px;
-            transition: opacity 0.3s ease;
+            font-weight: 500;
+            transition: opacity .3s;
         }
 
         .open-btn:hover {
-            opacity: 0.85;
+            opacity: .85;
         }
 
         @media (max-width: 768px) {
@@ -126,15 +167,29 @@
                 padding: 30px 20px;
             }
 
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
             h1 {
-                font-size: 30px;
+                font-size: 32px;
             }
         }
     </style>
 </head>
+
 <body>
 
-    <h1>Все товары</h1>
+    <div class="page-header">
+        <h1>Все товары</h1>
+
+        <div class="add-product">
+            <a href="{% url 'product_create' %}">Добавить товар</a>
+        </div>
+    </div>
+
     <p class="subtitle">Исследуйте товары по направлениям</p>
 
     <div class="products-grid">
@@ -151,7 +206,9 @@
             </div>
 
             <div class="product-title">
-                {{ product.product_name }}
+                <a href="{% url 'product_detail' product.id %}">
+                    {{ product.product_name }}
+                </a>
             </div>
 
             <div class="product-info">
@@ -174,7 +231,10 @@
 
             <br><br>
 
-            <a href="#" class="open-btn">Открыть</a>
+            <a href="{% url 'product_detail' product.id %}" class="open-btn">
+                Открыть
+            </a>
+
         </div>
         {% endfor %}
 
@@ -182,3 +242,5 @@
 
 </body>
 </html>
+
+

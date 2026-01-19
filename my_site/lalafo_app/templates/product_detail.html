@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product.product_name }}</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top, #3b3b98 0%, transparent 40%),
+                linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* MAIN CARD */
+        .detail-card {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            border-radius: 36px;
+            padding: 48px;
+            backdrop-filter: blur(18px);
+            box-shadow:
+                0 30px 80px rgba(0,0,0,.55),
+                inset 0 0 0 1px rgba(255,255,255,.12);
+            animation: fadeIn .6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HEADER */
+        .detail-header {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        /* IMAGE */
+        .image-box {
+            background: linear-gradient(145deg, #ffffff, #eaeaff);
+            border-radius: 32px;
+            padding: 24px;
+            height: 360px;
+            box-shadow: 0 20px 45px rgba(0,0,0,.35);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .no-image {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* INFO */
+        .info {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .title {
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -.5px;
+        }
+
+        .price {
+            font-size: 30px;
+            font-weight: 800;
+            color: #9aa3ff;
+        }
+
+        .meta {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 6px 18px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .new {
+            background: linear-gradient(135deg, #4caf50, #43e97b);
+        }
+
+        .used {
+            background: linear-gradient(135deg, #ff9800, #ffc107);
+        }
+
+        .row {
+            font-size: 15px;
+            color: #e6e6ff;
+        }
+
+        .row span {
+            color: #aab0ff;
+        }
+
+        /* DESCRIPTION */
+        .description {
+            margin-top: 45px;
+            padding-top: 35px;
+            border-top: 1px solid rgba(255,255,255,.12);
+        }
+
+        .description h3 {
+            font-size: 22px;
+            margin-bottom: 14px;
+        }
+
+        .description p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #e9e9ff;
+        }
+
+        /* ACTIONS */
+        .actions {
+            margin-top: 40px;
+            display: flex;
+            gap: 18px;
+        }
+
+        .btn {
+            padding: 15px 38px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .btn-back {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,255,255,.25);
+        }
+
+        .btn-call {
+            background: linear-gradient(135deg, #6a5cff, #4b6bff);
+            color: #fff;
+        }
+
+        .btn-call:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(75,107,255,.6);
+        }
+
+        @media (max-width: 900px) {
+            .detail-header {
+                grid-template-columns: 1fr;
+            }
+
+            .image-box {
+                height: 300px;
+            }
+
+            .title {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="detail-card">
+
+    <div class="detail-header">
+
+        <div class="image-box">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.product_name }}">
+            {% else %}
+                <div class="no-image">Нет изображения</div>
+            {% endif %}
+        </div>
+
+        <div class="info">
+            <div class="title">{{ product.product_name }}</div>
+            <div class="price">{{ product.price }} сом</div>
+
+            <div class="meta">
+                {% if product.product_type %}
+                    <span class="badge new">Новый</span>
+                {% else %}
+                    <span class="badge used">Б/У</span>
+                {% endif %}
+                <span class="badge" style="background:rgba(255,255,255,.15)">
+                    {{ product.category }}
+                </span>
+            </div>
+
+            <div class="row"><span>Телефон:</span> {{ product.phone }}</div>
+            <div class="row"><span>Владелец:</span> {{ product.owner }}</div>
+            <div class="row"><span>Создано:</span> {{ product.created_date|date:"d.m.Y" }}</div>
+
+            <div class="actions">
+                <a href="{% url 'product_list' %}" class="btn btn-back">← Назад</a>
+                <a href="tel:{{ product.phone }}" class="btn btn-call">Позвонить</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="description">
+        <h3>Описание</h3>
+        <p>{{ product.description }}</p>
+    </div>
+
+</div>
+
+</body>
+</html>
