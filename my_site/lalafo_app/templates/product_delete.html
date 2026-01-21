@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Удаление продукта</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top, #ff5f6d33 0%, transparent 40%),
+                linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .confirm-wrapper {
+            position: relative;
+            max-width: 540px;
+            width: 100%;
+        }
+
+        .glow {
+            position: absolute;
+            inset: -40px;
+            background: radial-gradient(circle, rgba(255,90,90,.35), transparent 60%);
+            filter: blur(40px);
+            z-index: 0;
+        }
+
+        .confirm-card {
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(22px);
+            border-radius: 36px;
+            padding: 48px 42px;
+            text-align: center;
+            box-shadow:
+                0 40px 100px rgba(0,0,0,.6),
+                inset 0 0 0 1px rgba(255,255,255,.15);
+            animation: popIn .55s cubic-bezier(.2,.8,.2,1);
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(.9) translateY(20px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .icon {
+            width: 86px;
+            height: 86px;
+            margin: 0 auto 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff4b4b, #ff7a7a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 18px 45px rgba(255,75,75,.6);
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            letter-spacing: -.3px;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffb4b4;
+            margin-bottom: 18px;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #e6e6ff;
+            margin-bottom: 36px;
+        }
+
+        .danger {
+            color: #ff9a9a;
+            font-weight: 700;
+        }
+
+        .actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 16px 38px;
+            border-radius: 999px;
+            border: none;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all .25s ease;
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #ff4b4b, #ff7a7a);
+            color: #fff;
+            box-shadow: 0 18px 45px rgba(255,75,75,.6);
+        }
+
+        .btn-delete:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 60px rgba(255,75,75,.85);
+        }
+
+        .btn-cancel {
+            padding: 16px 38px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.18);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .25s ease;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        @media (max-width: 480px) {
+            .actions {
+                flex-direction: column;
+            }
+
+            button, .btn-cancel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="confirm-wrapper">
+    <div class="glow"></div>
+
+    <div class="confirm-card">
+        <div class="icon">🗑</div>
+
+        <h1>Удалить продукт?</h1>
+        <div class="product-name">
+            «{{ product.product_name }}»
+        </div>
+
+        <p>
+            Ты действительно хочешь удалить этот продукт?
+            <br>
+            <span class="danger">Это действие нельзя отменить.</span>
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="actions">
+                <button type="submit" class="btn-delete">Да, удалить навсегда</button>
+                <a href="{% url 'product_list' %}" class="btn-cancel">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

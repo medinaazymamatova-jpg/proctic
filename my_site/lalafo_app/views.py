@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import (ListView, CreateView, DetailView,
+                                  UpdateView, DeleteView)
 from .models import Category,Product
 from .forms import ProductForm
 
@@ -23,3 +24,17 @@ class ProductDetailViews(DetailView):
     queryset = Product.objects.all()
     context_object_name = 'product'
     template_name = 'product_detail.html'
+
+
+class ProductUpdateViews(UpdateView):
+    queryset = Product.objects.all()
+    form_class = ProductForm
+    success_url = reverse_lazy('product_list')
+    template_name = 'product_update.html'
+
+class ProductDeleteViews(DeleteView):
+    queryset = Product.objects.all()
+    template_name = 'product_delete.html'
+    success_url = reverse_lazy('product_list')
+
+
